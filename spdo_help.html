@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>sPDO</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <style type="text/css">
+        html, body
+        {
+            height: 100%;
+        }
+
+        body
+        {
+            margin: 0;
+            font-family: "Arial", sans-serif;
+            font-size: 10pt;
+        }
+
+        a
+        {
+            color: #303030;
+            text-decoration: none;
+        }
+
+        a:hover
+        {
+            text-decoration: underline;
+        }
+
+        h1
+        {
+            font-size: 24pt;
+            font-weight: normal;
+            color: #303030;
+        }
+
+        h1 > span
+        {
+            font-size: 14pt;
+            color: #909090;
+            top: -5px;
+            position: relative;
+        }
+
+        h3
+        {
+            font-size: 16pt;
+            font-weight: normal;
+            color: #303030;
+            margin-bottom: 2px;
+        }
+
+        h4
+        {
+            font-size: 12pt;
+            font-weight: normal;
+            color: #303030;
+            margin-bottom: 2px;
+        }
+
+        hr
+        {
+            border-top: 1px solid #CCC;
+            border-right: none;
+            border-left: none;
+            border-bottom: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        p
+        {
+            color: #606060;
+        }
+
+        ol
+        {
+            display: block;
+        }
+
+        ol > li
+        {
+            color: #606060;
+        }
+
+        ol > li + li
+        {
+            margin-top: 4px;
+        }
+
+        code,
+        pre {
+            font-family: Monaco, Menlo, Consolas, "Courier New", monospace;
+        }
+        code {
+            padding: 2px 4px;
+            font-size: 90%;
+            color: #c7254e;
+            background-color: #f9f2f4;
+            white-space: nowrap;
+            border-radius: 4px;
+        }
+        pre {
+            display: block;
+            padding: 9.5px;
+            margin: 0 0 10px;
+            font-size: 13px;
+            line-height: 1.428571429;
+            word-break: break-all;
+            word-wrap: break-word;
+            color: #333333;
+            background-color: #f5f5f5;
+            border: 1px solid #cccccc;
+            border-radius: 4px;
+        }
+        pre.prettyprint {
+            margin-bottom: 20px;
+        }
+        pre code {
+            padding: 0;
+            font-size: inherit;
+            color: inherit;
+            white-space: pre-wrap;
+            background-color: transparent;
+            border: 0;
+        }
+        .pre-scrollable {
+            max-height: 340px;
+            overflow-y: scroll;
+        }
+
+        #wrapper
+        {
+            width: 100%;
+            height: auto !important;
+            min-height: 100%;
+            margin: 0 auto -50px;
+            padding: 5px 20px 20px 280px;
+            position: relative;
+            z-index: 1;
+            box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+            background: #FFF;
+        }
+
+        #sidebar
+        {
+            width: 250px;
+            height: auto !important;
+            min-height: 100%;
+            margin: 0;
+            padding: 0;
+            top: 0;
+            left: 0;
+            position: fixed;
+            z-index: 2;
+            box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+            background: #f5f5f5;
+            border-right: 2px solid #EEE;
+        }
+
+        .row
+        {
+            width: 100%;
+            height: auto;
+            margin: 0;
+            padding: 0;
+            display: block;
+            float: left;
+            box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+        }
+
+        .row + .row
+        {
+            margin-top: 10px;
+        }
+
+        .brand
+        {
+            font-family: "Arial", sans-serif;
+            font-size: 18pt;
+            font-weight: 600;
+            color: #999;
+            text-decoration: none;
+            -webkit-transition: 0.5s;
+            transition: 0.5s;
+        }
+
+        .brand:hover
+        {
+            color: #777;
+            text-decoration: none;
+        }
+
+        #sidebar .brand-block
+        {
+            display: block;
+            box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+            height: 75px;
+            line-height: 75px;
+            padding: 0 20px;
+        }
+
+        .menu
+        {
+            display: block;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .menu > li
+        {
+            width: 100%;
+            height: 35px;
+            margin: 0;
+            padding: 0;
+            display: block;
+            float: left;
+            box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+        }
+
+        .menu > li + li
+        {
+            border-top: 1px solid #e5e5e5;
+        }
+
+        .menu > li > a
+        {
+            width: 100%;
+            height: 35px;
+            line-height: 35px;
+            margin: 0;
+            padding: 0 15px;
+            display: block;
+            float: left;
+            box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+            background: transparent;
+            color: #666;
+            text-decoration: none;
+            font-family: "Arial", sans-serif;
+            font-size: 11pt;
+        }
+
+        .menu > li > a:hover
+        {
+            background: #eee;
+        }
+
+        #copyright
+        {
+            width: 100%;
+            height: auto;
+            margin: 0 0 15px;
+            padding: 15px;
+            display: block;
+            float: left;
+            box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+            background: #f5f5f5;
+            border: 1px solid #e5e5e5;
+            color: #808080;
+        }
+
+        #copyright hr
+        {
+            margin-top: 4px;
+            margin-bottom: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div id="sidebar">
+        <div class="row brand-block">
+            <a class="brand" href="https://github.com/gurkanbicer/sPDO">sPDO</a>
+        </div>
+        <div class="row">
+            <ul class="menu">
+                <li><a class="menu-link" href="#nedir">Nedir?</a></li>
+                <li><a class="menu-link" href="#kurulum">Kurulum</a></li>
+                <li><a class="menu-link" href="#fonksiyonlar">Fonksiyonlar</a></li>
+                <li><a class="menu-link" href="#degiskenler">Değişkenler</a></li>
+                <li><a class="menu-link" href="#ozellikler">Özellikler</a></li>
+                <li><a class="menu-link" href="#notlar">Sürüm Notları</a></li>
+            </ul>
+        </div>
+    </div>
+    <div id="wrapper">
+        <div class="row">
+            <h1>sPDO <span>veritabanı sınıfı</span></h1>
+        </div>
+        <div class="row">
+            <h3 id="nedir">sPDO nedir?</h3>
+            <hr />
+            <p><strong>sPDO</strong> bir veritabanı sınıfıdır.</p>
+            <p>CRUD işlemlerini tek satırda gerçekleştirmek, dönen sonucu script içerisinde daha rahat kullanabilmek, uzun kod satırlarının ve düzensizliğin önüne geçmek, mysql_* fonksiyonlarından kurtulmak ve nesne tabanlı programlamaya eğim kazandırmak için hazırlanmış bir sınıftır.</p>
+            <p>Ayrıca, önbellekleme özelliği ile belirli süre içerisinde SQL sorgunuzun sonucunu diskte depolamanıza ve gerektiğinde kullanmanıza olanak sağlar.</p>
+        </div>
+        <div class="row">
+            <h3 id="kurulum">Kurulum</h3>
+            <hr />
+            <p><em>Kurulum özel scriptlerde gerçekleşecekse; other dizinindeki dosyaları kullanacağız.</em>
+<pre>
+- codeigniter
+    - application
+        - config
+            | sPDO.php
+        - libraries
+            | sPDO.php
+        - third_party
+            - sPDO
+                - cache
+                | core.php
+- other
+    - cache
+    | config.php
+    | spdo.php
+    | spdo_core.php
+| spdo_help.html
+</pre>
+            </p>
+            <p>
+                <ol>
+                    <li><strong>spdo.php</strong> ve <strong>spdo_core.php</strong> dosyalarınızı scriptinizin bulunduğu dizine yükleyin.</li>
+                    <li>Dosyaları yüklediğiniz dizine <strong>cache</strong> veya sizin belirlediğiniz bir isimde dizin oluşturun ve CHMOD izinlerini <strong>755</strong> olarak ayarlayın.</li>
+                    <li><strong>config.php</strong> dosyasını scriptinizin bulunduğu dizine taşıyın. Eğer, bir config dosyanız varsa; aşağıdaki 2. kod parçasını ekleyin ya da <strong>config.php</strong> dosyasını farklı bir isimde kaydedin.</li>
+                </ol>
+            </p>
+            <p>Kod yazmaya başlayalım.</p>
+            <p>
+<pre><code>&lt;?php
+require_once 'config.php';
+require_once 'spdo.php';
+?&gt;</code></pre>
+            </p>
+            <p><strong>config.php</strong> ve <strong>spdo.php</strong> dosyalarımızı include ettikten sonra; <strong>config.php</strong> dosya içeriğini düzenleyelim.</p>
+            <p>
+<pre><code>&lt;?php
+$sPDO_cnf = array(
+    'username'      => 'arge',
+    'password'      => 'x123y456!!',
+    'database'      => 'arge',
+    'hostname'      => 'localhost',
+    'charset'       => 'utf8',
+    'cache'         => true,
+    'cachedir'      => 'cache/',
+    'cacheexpire'   => 900,
+);
+?&gt;</code></pre>
+            </p>
+            <p>MySQL kullanıcı adı ve parolamız, MySQL veritabanı adı, host adı, karakter seti, önbellekleme özelliği, önbellek dizini ve önbellek süresini bu dosyada belirliyoruz. Eğer önbellekleme özelliğini deaktif etmek istiyorsanız <strong>cache</strong> indisinin değerini <em>false</em> olarak değiştirin.</p>
+            <p>
+<pre><code>&lt?php
+$spdo = new sPDO($sPDO_cnf);
+?&gt;</code></pre>
+            </p>
+            <p><strong>$spdo</strong> değişkenine sınıfı atadıktan sonra scriptlerinizde kullanmaya başlayabilirsiniz.</p>
+            <h4>CodeIgniter</h4>
+            <p><em>Kurulum CodeIgniter'da gerçekleşecekse; codeigniter dizinindeki dosyaları kullanacağız.</em></p>
+            <p>
+                <ol>
+                    <li>Dosyaları application dizini altındaki config, libraries ve third_party dizinlerine taşıyın.</li>
+                    <li>config dizininde sPDO.php dosya içeriğini düzenleyin.</li>
+                </ol>
+            </p>
+            <p>Kod yazmaya başlayalım.</p>
+            <p>
+<pre><code>&lt;?php
+$this->load->libraries('sPDO');
+?&gt;</code></pre>
+            </p>
+            <p>Sınıfı controller dosyamızda üstteki kod satırı ile çağırıyoruz. Eğer, sPDO'nun otomatik olarak yüklenmesini istiyorsanız autoload.php dosyasını açın ve $autoload dizisine 'sPDO' içeriğinde bir string değer ekleyip, kaydedin.</p>
+        </div>
+        <div class="row">
+            <h3 id="fonksiyonlar">Fonksiyonlar</h3>
+            <hr />
+            <h4>get_results()</h4>
+            <p>SQL sorgusu sonucunda dönen <u>satır sayısı</u> 1'den fazla ise get_results() fonksiyonu kullanılır. Bu fonksiyon üç parametreden oluşmaktadır. <br /> <br />
+            İlk parametreye SQL sorgusu yazılır. İkinci parametre SQL Injection açıklarından korunmak için PDO'nun binding sistemini kullanır ve bu parametreye SQL sorgusu içerisinde kullanılacak değerler girilir. Üçüncü parametre ayrıştırma türüdür ve dönecek verinin object veya array tipinde dönmesini belirlemek için kullanılır.
+            </p>
+            <p>
+<pre><code>&lt;?php
+$results = $spdo->get_results('SELECT * FROM tbl');
+?&gt;</code></pre>
+            </p>
+            <p>Üstteki kod satırında <strong>tbl</strong> tablosundan tüm alanları ve satırları getirilmesi ve $results değişkenine atanması isteniyor. Sonucu görmek için aşağıdaki kod satırlarını da dahil edebilirsiniz.</p>
+            <p>
+<pre><code>&lt;?php
+echo '&lt;pre&gt;';
+var_dump($results);
+echo '&lt;/pre&gt;';
+?&gt;</code></pre>
+            </p>
+            <h4>get_row()</h4>
+            <p>SQL sorgusu sonucunda dönen <u>satır sayısı</u> 1 ise get_row() fonksiyonu kullanılır. Bu fonksiyon üç parametreden oluşmaktadır. <br /> <br />
+                İlk parametreye SQL sorgusu yazılır. İkinci parametre SQL Injection açıklarından korunmak için PDO'nun binding sistemini kullanır ve bu parametreye SQL sorgusu içerisinde kullanılacak değerler girilir. Üçüncü parametre ayrıştırma türüdür ve dönecek verinin object veya array tipinde dönmesini belirlemek için kullanılır.
+            </p>
+            <p>
+<pre><code>&lt;?php
+$results = $spdo->get_row('SELECT * FROM tbl WHERE id=1');
+?&gt;</code></pre>
+            </p>
+            <p>Üstteki kod satırında <strong>tbl</strong> tablosundan tüm alanları ve satırları getirilmesi ve $results değişkenine atanması isteniyor. Sonucu görmek için aşağıdaki kod satırlarını da dahil edebilirsiniz.</p>
+            <p>
+<pre><code>&lt;?php
+echo '&lt;pre&gt;';
+var_dump($results);
+echo '&lt;/pre&gt;';
+?&gt;</code></pre>
+            </p>
+            <h4>get_var()</h4>
+            <p>SQL sorgusu sonucunda tek alan değeri dönecekse get_var() fonksiyonu kullanılır. Bu fonksiyon iki parametreden oluşmaktadır. <br /> <br />
+                İlk parametreye SQL sorgusu yazılır. İkinci parametre SQL Injection açıklarından korunmak için PDO'nun binding sistemini kullanır ve bu parametreye SQL sorgusu içerisinde kullanılacak değerler girilir.
+            </p>
+            <p>
+<pre><code>&lt;?php
+$results = $spdo->get_var('SELECT name FROM tbl WHERE id=1');
+?&gt;</code></pre>
+            </p>
+            <p>Üstteki kod satırında <strong>tbl</strong> tablosundan tüm alanları ve satırları getirilmesi ve $results değişkenine atanması isteniyor. Sonucu görmek için aşağıdaki kod satırlarını da dahil edebilirsiniz.</p>
+            <p>
+<pre><code>&lt;?php
+echo '&lt;pre&gt;';
+var_dump($results);
+echo '&lt;/pre&gt;';
+?&gt;</code></pre>
+            </p>
+            <h4>insert()</h4>
+            <p>Veri ekleme işlemlerinde insert() fonksiyonu kullanılır. İşlemin başarılı olması durumunda son eklenen satırın ID değerini döndürür. Başarısız olursa <em>false</em> döner. Bu fonksiyon iki parametreden oluşmaktadır. <br /> <br />
+                İlk parametreye SQL sorgusu yazılır. İkinci parametre SQL Injection açıklarından korunmak için PDO'nun binding sistemini kullanır ve bu parametreye SQL sorgusu içerisinde kullanılacak değerler girilir.</p>
+            <p>
+<pre><code>&lt;?php
+$insert_id = $spdo->insert('INSERT INTO tbl SET name="sPDO Sınıfı", version="1.1.0", description="Veritabanı sınıfı"');
+?&gt;</code></pre>
+            </p>
+            <h4>update()</h4>
+            <p>Veri güncelleme işlemlerinde update() fonksiyonu kullanılır. İşlemin başarılı olması durumunda etkilenen satır sayısını döndürür. Başarısız olursa <em>false</em> döner. Bu fonksiyon iki parametreden oluşmaktadır. <br /> <br />
+                İlk parametreye SQL sorgusu yazılır. İkinci parametre SQL Injection açıklarından korunmak için PDO'nun binding sistemini kullanır ve bu parametreye SQL sorgusu içerisinde kullanılacak değerler girilir.</p>
+            <p>
+<pre><code>&lt;?php
+$affected_rows = $spdo->update('UPDATE tbl SET version="1.2.0" WHERE id > 3');
+?&gt;</code></pre>
+            </p>
+            <h4>delete()</h4>
+            <p>Veri silme işlemlerinde delete() fonksiyonu kullanılır. İşlemin başarılı olması durumunda etkilenen satır sayısını döndürür. Başarısız olursa <em>false</em> döner. Bu fonksiyon iki parametreden oluşmaktadır. <br /> <br />
+                İlk parametreye SQL sorgusu yazılır. İkinci parametre SQL Injection açıklarından korunmak için PDO'nun binding sistemini kullanır ve bu parametreye SQL sorgusu içerisinde kullanılacak değerler girilir.</p>
+            <p>
+<pre><code>&lt;?php
+$affected_rows = $spdo->delete('DELETE FROM tbl WHERE id > 5');
+?&gt;</code></pre>
+            </p>
+        </div>
+        <div class="row">
+            <h3 id="degiskenler">Değişkenler</h3>
+            <hr />
+            <h4>num_rows</h4>
+            <p>get_results(), get_row() ve get_var() fonksiyonlarıyla beraber kullanılan num_rows değişkeni SELECT sorgusu sonucunda dönen satır sayısını verir. <br/> <em>NOT: Son sorguya ait satır sayısını tuttuğu için, sorgunun hemen altında kullanılmalıdır.</em></p>
+            <p>
+<pre><code>&lt;?php
+$results = $spdo->get_results('SELECT * FROM tbl');
+$row_count = $spdo->num_rows;
+?&gt;</code></pre>
+            </p>
+
+        </div>
+        <div class="row">
+            <h3 id="ozellikler">Özellikler</h3>
+            <hr />
+            <h4>Cache</h4>
+            <p>sPDO, cache özelliğinde dosya sistemini kullanır. SQL sorgularından dönen veriler ve veri sayısı txt dosyası içerisine arkaplanda kayıt edilir. SQL sorgusunun tekrar kullanımında dosyanın değiştirilme tarihinin, config dosyası içerisinde belirlediğiniz zaman dilimini aşmaması durumunda, sorgudan dönen verilerin kayıt edildiği dosya okunur. Zaman dilimini aşması durumunda tekrar MySQL'e bağlanır. </p>
+            <p>Cache özelliğini aktif etmek için config dosyası içerisindeki $sPDO_cnf dizisinde, cache indisi true olarak değiştirilir. Pasifleştirilmek isteniyorsa, false olarak değiştirilir.</p>
+            <p>
+<pre><code>&lt;?php
+$sPDO_cnf = array(
+    'cache'         => true,
+    'cachedir'      => 'cache/',
+    'cacheexpire'   => 900,
+);
+?&gt;</code></pre>
+            </p>
+            <h4>Binding</h4>
+            <p>Binding sistemi PDO sınıfının bir özelliğidir. SQL Injection açıklarından ve sorgu içerisinde özel karakter kullanımından oluşabilecek hataların önüne geçmek için kullanılır.</p>
+            <p>sPDO'da tüm fonksiyonlarda binding sistemi kullanılabilmektedir. Her fonksiyon için birer örnekle binding sistemini açıklayalım.</p>
+            <p>
+<pre><code>&lt;?php
+$results = $spdo->get_results('SELECT * FROM tbl WHERE id > ? AND name = ?', array(3, "Ali"));
+?&gt;</code></pre>
+<pre><code>&lt;?php
+$results = $spdo->get_row('SELECT * FROM tbl WHERE id = ? AND name = ?', array(7, "Ali"));
+?&gt;</code></pre>
+<pre><code>&lt;?php
+$results = $spdo->get_var('SELECT email FROM tbl WHERE id = ? AND name = ?', array(7, "Ali"));
+?&gt;</code></pre>
+<pre><code>&lt;?php
+$insert_id = $spdo->insert('INSERT INTO tbl SET name=?, email=?, age=?', array("Ali", "deneme@yandex.com", 17));
+?&gt;</code></pre>
+<pre><code>&lt;?php
+$affected_rows = $spdo->update('UPDATE tbl SET name=?, email=?, age=? WHERE id=?', array("Mehmet", "deneme@gmail.com", 19, 100));
+?&gt;</code></pre>
+<pre><code>&lt;?php
+$affected_rows = $spdo->delete('DELETE FROM tbl WHERE id=?', array(1));
+?&gt;</code></pre>
+            </p>
+            <h4>Ayrıştırma Türleri</h4>
+            <p>get_results() ve get_row() fonksiyonlarda dönen veriyi array veya object olarak kullanabilirsiniz. Standart olarak dönen veri object tipindedir. Eğer array tipinde kullanmak isterseniz üçüncü parametreye <strong>assoc</strong> yazmanız gerekir. Birer örnekle ayrıştırma özelliğini açıklayalım.</p>
+            <p>
+<pre><code>&lt;?php
+$results = get_results('SELECT * FROM tbl WHERE id > 3', null, 'assoc');
+?&gt;</code></pre>
+<pre><code>&lt;?php
+$results = get_row('SELECT * FROM tbl WHERE id = 3', null, 'assoc');
+?&gt;</code></pre>
+            </p>
+        </div>
+        <div class="row">
+            <h3 id="notlar">Sürüm Notları</h3>
+            <hr />
+            <p>
+                1.0.0 - Başlangıç sürümü (23.10.2013)<br />
+                <strong>1.1.0 - Cache özelliği eklendi. (25.10.2013)</strong><br />
+            </p>
+        </div>
+        <div class="row">
+            <div id="copyright">
+                <a href="https://github.com/gurkanbicer/sPDO" target="_blank">GitHub</a> - <strong>Versiyon:</strong> 1.1.0 -  <strong>Geliştirici:</strong> <a href="http://tr.linkedin.com/in/gurkanbicer" target="_blank">Gürkan Biçer</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
