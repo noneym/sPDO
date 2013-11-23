@@ -3,7 +3,7 @@ sPDO (Smart PDO)
 
 sPDO is a database class. sPDO, uses the PDO class. Perform CRUD (Create, Read, Update, Delete) operations on MySQL. sPDO functions, safe, fast and easy.
 
-Version.....: 1.1.0
+Version.....: 1.2.0
 
 Author.......: Gürkan Biçer
 
