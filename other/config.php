@@ -1,40 +1,25 @@
 <?php
-/**
- * @author Gürkan Biçer <gurkanbicer@yandex.com>
- *
- * @for sPDO
- */
+$spdo_config = array(
+    'username'      => 'MYSQL KULLANICI ADI',
+    'password'      => 'MYSQL KULLANICI PAROLASI',
+    'database'      => 'MYSQL VERITABANI ADI',
 
-$sPDO_cnf = array(
-
-    /**
-     * MySQL kullanıcı bilgileri
-     *
-     */
-    'username'      => '',
-    'password'      => '',
-
-    /**
-     * MySQL veritabanı ve host adı
-     *
-     */
-    'database'      => '',
+    # Sunucu ortamınızda özel bir yapılandırma yoksa, hostname anahtarının alacağı değer localhost kalmalı.
     'hostname'      => 'localhost',
 
-    /**
-     * MySQL bağlantısı için karakter seti
-     *
-     */
+    # Sorgulama işleminde kullanılan karakter seti. Varsayılan değer utf8'dir.
     'char_set'      => 'utf8',
 
-    /**
-     * SQL sorgu sonuçlarının önbelleklenmesi
-     *
-     */
-    'cache'         => true,
-    'cachedir'      => 'cache/',
-    'cacheexpire'   => 900,
+    # Önbellekleme özelliği, kaynak kullanımını en aza indirmeyi amaçlar.
+    # SQL sorguları tekrar sorgulandığında, belirlediğiniz süreden eski değilse diskten veriyi okur.
+    # Etkinleştirmek için true, pasifleştirmek için false değerini atamalısınız.
+    'caching'       => false,
 
+    # Önbellekleme özelliği etkin ise cache_dir anahtarına atanan değer önbellek dosyalarının tutulacağı dizin olarak
+    # benimsenir. Bu dizin yazılabilir olmalıdır.
+    'cache_dir'     => 'cache',
+
+    # Önbellekleme özelliği etkin ise belirlediğiniz saniye cinsinden süre boyunca diskteki sonuç dönecektir.
+    'cache_expire'  => 7200,
 );
-
-/* End of file config.php */
+?>
