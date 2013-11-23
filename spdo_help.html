@@ -1,542 +1,382 @@
 <!DOCTYPE html>
-<html>
-<head>
-    <title>sPDO</title>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-    <style type="text/css">
-        html, body
-        {
-            height: 100%;
-        }
-
-        body
-        {
-            margin: 0;
-            font-family: "Arial", sans-serif;
-            font-size: 10pt;
-        }
-
-        a
-        {
-            color: #303030;
-            text-decoration: none;
-        }
-
-        a:hover
-        {
-            text-decoration: underline;
-        }
-
-        h1
-        {
-            font-size: 24pt;
-            font-weight: normal;
-            color: #303030;
-        }
-
-        h1 > span
-        {
-            font-size: 14pt;
-            color: #909090;
-            top: -5px;
-            position: relative;
-        }
-
-        h3
-        {
-            font-size: 16pt;
-            font-weight: normal;
-            color: #303030;
-            margin-bottom: 2px;
-        }
-
-        h4
-        {
-            font-size: 12pt;
-            font-weight: normal;
-            color: #303030;
-            margin-bottom: 2px;
-        }
-
-        hr
-        {
-            border-top: 1px solid #CCC;
-            border-right: none;
-            border-left: none;
-            border-bottom: none;
-            margin: 0;
-            padding: 0;
-        }
-
-        p
-        {
-            color: #606060;
-        }
-
-        ol
-        {
-            display: block;
-        }
-
-        ol > li
-        {
-            color: #606060;
-        }
-
-        ol > li + li
-        {
-            margin-top: 4px;
-        }
-
-        code,
-        pre {
-            font-family: Monaco, Menlo, Consolas, "Courier New", monospace;
-        }
-        code {
-            padding: 2px 4px;
-            font-size: 90%;
-            color: #c7254e;
-            background-color: #f9f2f4;
-            white-space: nowrap;
-            border-radius: 4px;
-        }
-        pre {
-            display: block;
-            padding: 9.5px;
-            margin: 0 0 10px;
-            font-size: 13px;
-            line-height: 1.428571429;
-            word-break: break-all;
-            word-wrap: break-word;
-            color: #333333;
-            background-color: #f5f5f5;
-            border: 1px solid #cccccc;
-            border-radius: 4px;
-        }
-        pre.prettyprint {
-            margin-bottom: 20px;
-        }
-        pre code {
-            padding: 0;
-            font-size: inherit;
-            color: inherit;
-            white-space: pre-wrap;
-            background-color: transparent;
-            border: 0;
-        }
-        .pre-scrollable {
-            max-height: 340px;
-            overflow-y: scroll;
-        }
-
-        #wrapper
-        {
-            width: 100%;
-            height: auto !important;
-            min-height: 100%;
-            margin: 0 auto -50px;
-            padding: 5px 20px 20px 280px;
-            position: relative;
-            z-index: 1;
-            box-sizing: border-box;
-            -moz-box-sizing: border-box;
-            -webkit-box-sizing: border-box;
-            background: #FFF;
-        }
-
-        #sidebar
-        {
-            width: 250px;
-            height: auto !important;
-            min-height: 100%;
-            margin: 0;
-            padding: 0;
-            top: 0;
-            left: 0;
-            position: fixed;
-            z-index: 2;
-            box-sizing: border-box;
-            -moz-box-sizing: border-box;
-            -webkit-box-sizing: border-box;
-            background: #f5f5f5;
-            border-right: 2px solid #EEE;
-        }
-
-        .row
-        {
-            width: 100%;
-            height: auto;
-            margin: 0;
-            padding: 0;
-            display: block;
-            float: left;
-            box-sizing: border-box;
-            -moz-box-sizing: border-box;
-            -webkit-box-sizing: border-box;
-        }
-
-        .row + .row
-        {
-            margin-top: 10px;
-        }
-
-        .brand
-        {
-            font-family: "Arial", sans-serif;
-            font-size: 18pt;
-            font-weight: 600;
-            color: #999;
-            text-decoration: none;
-            -webkit-transition: 0.5s;
-            transition: 0.5s;
-        }
-
-        .brand:hover
-        {
-            color: #777;
-            text-decoration: none;
-        }
-
-        #sidebar .brand-block
-        {
-            display: block;
-            box-sizing: border-box;
-            -moz-box-sizing: border-box;
-            -webkit-box-sizing: border-box;
-            height: 75px;
-            line-height: 75px;
-            padding: 0 20px;
-        }
-
-        .menu
-        {
-            display: block;
-            margin: 0;
-            padding: 0;
-            list-style: none;
-        }
-
-        .menu > li
-        {
-            width: 100%;
-            height: 35px;
-            margin: 0;
-            padding: 0;
-            display: block;
-            float: left;
-            box-sizing: border-box;
-            -moz-box-sizing: border-box;
-            -webkit-box-sizing: border-box;
-        }
-
-        .menu > li + li
-        {
-            border-top: 1px solid #e5e5e5;
-        }
-
-        .menu > li > a
-        {
-            width: 100%;
-            height: 35px;
-            line-height: 35px;
-            margin: 0;
-            padding: 0 15px;
-            display: block;
-            float: left;
-            box-sizing: border-box;
-            -moz-box-sizing: border-box;
-            -webkit-box-sizing: border-box;
-            background: transparent;
-            color: #666;
-            text-decoration: none;
-            font-family: "Arial", sans-serif;
-            font-size: 11pt;
-        }
-
-        .menu > li > a:hover
-        {
-            background: #eee;
-        }
-
-        #copyright
-        {
-            width: 100%;
-            height: auto;
-            margin: 0 0 15px;
-            padding: 15px;
-            display: block;
-            float: left;
-            box-sizing: border-box;
-            -moz-box-sizing: border-box;
-            -webkit-box-sizing: border-box;
-            background: #f5f5f5;
-            border: 1px solid #e5e5e5;
-            color: #808080;
-        }
-
-        #copyright hr
-        {
-            margin-top: 4px;
-            margin-bottom: 4px;
-        }
-    </style>
-</head>
-<body>
-    <div id="sidebar">
-        <div class="row brand-block">
-            <a class="brand" href="https://github.com/gurkanbicer/sPDO">sPDO</a>
-        </div>
-        <div class="row">
-            <ul class="menu">
-                <li><a class="menu-link" href="#nedir">Nedir?</a></li>
-                <li><a class="menu-link" href="#kurulum">Kurulum</a></li>
-                <li><a class="menu-link" href="#fonksiyonlar">Fonksiyonlar</a></li>
-                <li><a class="menu-link" href="#degiskenler">Değişkenler</a></li>
-                <li><a class="menu-link" href="#ozellikler">Özellikler</a></li>
-                <li><a class="menu-link" href="#notlar">Sürüm Notları</a></li>
-            </ul>
-        </div>
-    </div>
-    <div id="wrapper">
-        <div class="row">
-            <h1>sPDO <span>veritabanı sınıfı</span></h1>
-        </div>
-        <div class="row">
-            <h3 id="nedir">sPDO nedir?</h3>
-            <hr />
-            <p><strong>sPDO</strong> bir veritabanı sınıfıdır.</p>
-            <p>CRUD işlemlerini tek satırda gerçekleştirmek, dönen sonucu script içerisinde daha rahat kullanabilmek, uzun kod satırlarının ve düzensizliğin önüne geçmek, mysql_* fonksiyonlarından kurtulmak ve nesne tabanlı programlamaya eğim kazandırmak için hazırlanmış bir sınıftır.</p>
-            <p>Ayrıca, önbellekleme özelliği ile belirli süre içerisinde SQL sorgunuzun sonucunu diskte depolamanıza ve gerektiğinde kullanmanıza olanak sağlar.</p>
-        </div>
-        <div class="row">
-            <h3 id="kurulum">Kurulum</h3>
-            <hr />
-            <p><em>Kurulum özel scriptlerde gerçekleşecekse; other dizinindeki dosyaları kullanacağız.</em>
-<pre>
-- codeigniter
+<html lang="en">
+    <head>
+        <title>sPDO - PHP Veritabanı Sınıfı</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <style type="text/css">
+        @import url(http://fonts.googleapis.com/css?family=Roboto:900,400,500,700);body,html{height:100%}body{background:#EEE url(http://www.gurkanbicer.com.tr/public/noise.png) repeat;font-family:Arial,sans-serif;font-size:10pt;font-weight:400;margin:0}#wrapper{width:100%;height:100%;height:auto!important;min-height:100%;margin:0 auto -50px;padding:0}#sticky-footer{width:100%;height:50px;margin:0;padding:0;clear:both;box-sizing:border-box;-moz-box-sizing:border-box;-webkit-box-sizing:border-box;background:#303030 url(http://www.gurkanbicer.com.tr/public/noise-2.png) repeat}#sticky-footer .container{line-height:50px;color:#DDD}#sticky-footer .container a{color:#FFF;text-decoration:none}#sticky-footer .container a:hover{text-decoration:underline}#navbar{background:#9061C2 url(http://www.gurkanbicer.com.tr/public/noise-2.png) repeat;width:100%;height:50px;margin:0;padding:0;display:block;float:left;position:fixed}#contents{width:100%;height:auto;margin:0;padding:50px 0;display:block;float:left;box-sizing:border-box;-moz-box-sizing:border-box;-webkit-box-sizing:border-box}.container{width:900px;height:auto;min-height:10px;margin:0 auto;padding:0;box-sizing:border-box;-moz-box-sizing:border-box;-webkit-box-sizing:border-box}.pull-left{float:left}.pull-right{float:right}.row{width:100%;height:auto;min-height:30px;margin:0;padding:0;display:block;float:left}.row+.row{margin-top:15px}h1{font-family:Roboto,sans-serif;font-size:18pt;font-weight:700;color:#303030;margin:25px 0;padding:0;text-align:left}h3{font-family:Roboto,sans-serif;font-size:12pt;font-weight:500;color:#606060;margin:10px 0;padding:0}p{margin:0;padding:0;line-height:1.4;font-family:Arial,sans-serif;font-size:10pt;color:#303030}p+p{margin-top:10px}p a{color:#303030}ul.content-list li+li{margin-top:5px}ul.content-list li ul{margin-top:10px}ul.content-list li a{color:#303030;text-decoration:none}ul.content-list li a:hover{text-decoration:underline}code,pre{font-family:Monaco,Menlo,Consolas,"Courier New",monospace}code{padding:2px 4px;font-size:90%;color:#c7254e;background-color:#f9f2f4;white-space:nowrap;border-radius:4px}pre{display:block;padding:9.5px;margin:10px 0;font-size:13px;line-height:1.428571429;word-break:break-all;word-wrap:break-word;color:#333;background-color:#f5f5f5;border:1px solid #ccc;border-radius:4px}pre.prettyprint{margin-bottom:20px}pre code{padding:0;font-size:inherit;color:inherit;white-space:pre-wrap;background-color:transparent;border:0}.pre-scrollable{max-height:340px;overflow-y:scroll}#navbar-menu{margin:0;padding:0;list-style:none;height:50px}#navbar-menu>li.brand{width:auto;height:50px;line-height:50px;margin:0 auto;padding:0 20px;display:block;float:left;box-sizing:border-box;-moz-box-sizing:border-box;-webkit-box-sizing:border-box}#navbar-menu>li.brand>a{color:#FFF;font-family:Roboto,sans-serif;font-size:20pt;font-weight:700;text-decoration:none;transition:all .2s;-webkit-transition:all .2s}#navbar-menu>li.brand>a:hover{color:#EEE}#navbar-menu>li.item{width:auto;height:50px;line-height:50px;margin:0;padding:0 15px;display:block;float:left;box-sizing:border-box;-moz-box-sizing:border-box;-webkit-box-sizing:border-box}#navbar-menu>li.item>a{color:#FFF;font-family:Arial,sans-serif;font-size:11pt;font-weight:400;text-decoration:none}#navbar-menu>li.item>a:hover{text-decoration:underline}
+        </style>
+    </head>
+    <body>
+        <div id="wrapper">
+            <div id="navbar">
+                <div class="container">
+                    <ul id="navbar-menu" class="pull-left">
+                        <li class="brand">
+                            <a href="index.html" title="sPDO">Spdo</a>
+                        </li>
+                        <li class="item">
+                            <a href="index.html#intro">Giriş</a>
+                        </li>
+                        <li class="item">
+                            <a href="index.html#requirements">Gereksinimler</a>
+                        </li>
+                        <li class="item">
+                            <a href="index.html#installation">Kurulum</a>
+                        </li>
+                        <li class="item">
+                            <a href="index.html#functions">Fonksiyonlar</a>
+                        </li>
+                        <li class="item">
+                            <a href="index.html#variables">Değişkenler</a>
+                        </li>
+                    </ul>
+                    <ul id="navbar-menu" class="pull-right">
+                        <li class="item">
+                            <a href="https://github.com/gurkanbicer/sPDO">Github</a>
+                        </li>
+                        <li class="item">
+                            <a href="https://github.com/gurkanbicer/sPDO/archive/master.zip">İndir (1.2.0)</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div id="contents">
+                <div class="container">
+                    <div class="row">
+                        <h1 id="intro">Giriş</h1>
+                        <h3>Spdo nedir?</h3>
+                        <p><strong>Spdo</strong> bir veritabanı sınıfıdır. <strong>MySQL</strong> üzerinde <abbr title="Create Read Update Delete">CRUD</abbr> işlemlerini kolaylaştırmak, geliştiriciyi PHP'nin eski mysql fonksiyonlarından kurtarmak ve <a title="Object Relational Mapping" href="http://tr.wikipedia.org/wiki/ORM" target="_blank">ORM</a> yapı ile geliştiriciyi nesne tabanlı programlamaya teşvik etmek amaçlarını gütmektedir. <strong>Spdo</strong> sınıfı, arkaplanda PHP'nin <abbr title="PHP Data Objects">PDO</abbr> eklentisini kullanmaktadır.</p>
+                    </div>
+                    <div class="row">
+                        <h3>Geçmiş</h3>
+                        <p>Başlangıç sürümü, <strong>PDO</strong> eklentisini daha kolay ve güvenli bir şekilde kullanmak, PDO fonksiyonlarını <strong>Spdo</strong> sınıfı içerisinde isteğe bağlı kullanabilme imkanı tanımak ve bu fonksiyonları <em>static</em> yapıda kullanabilmek için hazırlanmıştı.</p>
+                        <p>1.1.0 sürümünde; çekirdek düzenlemesi yapılarak fonksiyonlar <em>public</em> yapıya çevrildi, PDO eklentisine ait fonksiyonların kullanımı kaldırıldı ve sorgu sonuçlarını önbellekleme özelliği eklendi.</p>
+                    </div>
+                    <div class="row">
+                        <h3>Neler yeni?</h3>
+                        <ul class="content-list">
+                            <li>Çekirdek ve fonksiyonlar, işlemlerin olası hatalarda daha hızlı sonuca erişmesi ve iç içe if else bloklarının sebep olduğu kod yığınından kurtulması için istisna yönetimi <em>try catch</em> yapısına geçildi.</li>
+                            <li><em>insert()</em>, <em>update()</em> ve <em>delete()</em> fonksiyonları <em>execute()</em> fonksiyonunda birleştirildi.</li>
+                            <li>ORM yapıya geçildi. Eklenen yeni fonksiyonlar:
+                                <ul>
+                                    <li>select()</li>
+                                    <li>where()</li>
+                                    <li>order()</li>
+                                    <li>group()</li>
+                                    <li>limit()</li>
+                                    <li>result()</li>
+                                    <li>insert()</li>
+                                    <li>update()</li>
+                                    <li>delete()</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="row">
+                        <h1 id="requirements">Gereksinimler</h1>
+                        <p><strong>Spdo</strong> sınıfı, arkaplanda <strong>PDO</strong> eklentisini kullandığı için, sunucu ortamınızda PDO eklentisinin kurulu olması ve PDO için MySQL uzantısının aktif olması gerekmektedir. PDO eklentisinin kurulumu için açıklamalara <strong>PHP.net</strong> sitesinde bu <a href="http://www.php.net/manual/tr/pdo.installation.php" title="PDO kurulumu" target="_blank">link</a>ten erişebilirsiniz.</p>
+                    </div>
+                    <div class="row">
+                        <h1 id="installation">Kurulum</h1>
+                        <p>Spdo sınıfını indirip, açtığınızda bu dosyalara erişeceksiniz:</p>
+<pre><code>- codeigniter
     - application
         - config
-            | sPDO.php
+            | spdo.php
         - libraries
-            | sPDO.php
+            | Spdo.php
         - third_party
             - sPDO
-                - cache
+                + cache
                 | core.php
 - other
-    - cache
+    + cache
     | config.php
-    | spdo.php
-    | spdo_core.php
+    | Spdo.php
+    | Spdo_Core.php
 | spdo_help.html
-</pre>
-            </p>
-            <p>
-                <ol>
-                    <li><strong>spdo.php</strong> ve <strong>spdo_core.php</strong> dosyalarınızı scriptinizin bulunduğu dizine yükleyin.</li>
-                    <li>Dosyaları yüklediğiniz dizine <strong>cache</strong> veya sizin belirlediğiniz bir isimde dizin oluşturun ve CHMOD izinlerini <strong>755</strong> olarak ayarlayın.</li>
-                    <li><strong>config.php</strong> dosyasını scriptinizin bulunduğu dizine taşıyın. Eğer, bir config dosyanız varsa; aşağıdaki 2. kod parçasını ekleyin ya da <strong>config.php</strong> dosyasını farklı bir isimde kaydedin.</li>
-                </ol>
-            </p>
-            <p>Kod yazmaya başlayalım.</p>
-            <p>
+</code></pre>
+                        <p><strong>Spdo</strong> sınıfını hangi platformda kullanmak istiyorsanız aşağıdaki başlıklardan size uygun olanını seçip kurulum adımları takip etmelisiniz.</p>
+                    </div>
+                    <div class="row">
+                        <h3>Genel Kullanım</h3>
+                        <p>İndirdiğiniz zip dosyasını açtığınızda <strong>codeigniter</strong> ve <strong>other</strong> klasörleri ile karşılaşacaksınız. Genel kullanım için <strong>other</strong> klasöründeki dosyaları kullanacaksınız.</p>
+                        <ul class="content-list">
+                            <li><em>Spdo.php</em> ve <em>Spdo_Core.php</em> dosyalarını scriptinizin bulunduğu dizine kopyalayın.</li>
+                            <li>Bir ayar dosyası oluşturun veya <em>config.php</em> dosyasını scriptinizin bulunduğu dizine kopyalayın. Eğer ayar dosyası oluşturmak istiyorsanız;
+ <pre><code>&lt;?php
+ $spdo_config = array(
+     'username'      => '<em>MYSQL KULLANICI ADI</em>',
+     'password'      => '<em>MYSQL KULLANICI PAROLASI</em>',
+     'database'      => '<em>MYSQL VERITABANI ADI</em>',
+
+     # Sunucu ortamınızda özel bir yapılandırma yoksa, hostname anahtarının alacağı değer <em>localhost</em> kalmalı.
+     'hostname'      => 'localhost',
+
+     # Sorgulama işleminde kullanılan karakter seti. Varsayılan değer <em>utf8</em>'dir.
+     'char_set'      => 'utf8',
+
+     # Önbellekleme özelliği, kaynak kullanımını en aza indirmeyi amaçlar.
+     # SQL sorguları tekrar sorgulandığında, belirlediğiniz süreden eski değilse diskten veriyi okur.
+     # Etkinleştirmek için <em>true</em>, pasifleştirmek için <em>false</em> değerini atamalısınız.
+     'caching'       => false,
+
+     # Önbellekleme özelliği etkin ise <em>cache_dir</em> anahtarına atanan değer önbellek dosyalarının tutulacağı dizin olarak
+     # benimsenir. Bu dizin yazılabilir olmalıdır.
+     'cache_dir'     => 'cache',
+
+     # Önbellekleme özelliği etkin ise belirlediğiniz saniye cinsinden süre boyunca diskteki sonuç dönecektir.
+     'cache_expire'  => 7200,
+ );
+ ?&gt;</code></pre>
+                            </li>
+                            <li><em>Spdo.php</em> ve <em>Spdo_Core.php</em> dosyalarını <em>require_once</em> metodu ile script dosyanıza çağırın.
+<pre><code>&lt;?php
+require_once 'Spdo_Core.php';
+require_once 'Spdo.php';
+?&gt;</code></pre>
+                            </li>
+                            <li>Ayar dosyasını <em>require_once</em> metoduyla script dosyanıza çağırın.
 <pre><code>&lt;?php
 require_once 'config.php';
-require_once 'spdo.php';
 ?&gt;</code></pre>
-            </p>
-            <p><strong>config.php</strong> ve <strong>spdo.php</strong> dosyalarımızı include ettikten sonra; <strong>config.php</strong> dosya içeriğini düzenleyelim.</p>
-            <p>
+                            </li>
+                            <li>Sınıfı bir değişkene yükleyin.
 <pre><code>&lt;?php
-$sPDO_cnf = array(
-    'username'      => 'arge',
-    'password'      => 'x123y456!!',
-    'database'      => 'arge',
-    'hostname'      => 'localhost',
-    'charset'       => 'utf8',
-    'cache'         => true,
-    'cachedir'      => 'cache/',
-    'cacheexpire'   => 900,
+$spdo = new Spdo($spdo_config);
+?&gt;</code></pre>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="row">
+                        <h3>Codeigniter</h3>
+                        <p><strong>Codeigniter</strong> framework'ü ile çalışıyorsanız, kurulum adımlarında gerekli olacak dosyaları <strong>codeigniter</strong> klasöründe bulacaksınız.</p>
+                        <ul class="content-list">
+                            <li><strong>application</strong> dizini içeriğini projenizin <em>application</em> dizinine dahil edin.</li>
+                            <li><strong>config</strong> dizininde <em>spdo.php</em> dosyasını düzenleyin.</li>
+                            <li>Sınıfın otomatik olarak yüklenmesini istiyorsanız, <strong>config</strong> dizininde yer alan <em>autoload.php</em> dosyasında şu düzenlemeyi yapın; <em>$autoload['libraries']</em> dizisine sınıfın ismini küçük harfler ile değer olarak ekleyin.
+ <pre><code>$autoload['libraries'] = array('spdo');</code></pre>
+                                Eğer, otomatik yüklenmesini istemiyorsanız controller dosyanızda şu kodu kullanın:
+<pre><code>$this->load->library('spdo');</code></pre>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="row">
+                        <p>Kurulum işlemlerini tamamladıktan sonra <strong>Spdo</strong> fonksiyonlarına bir gözatın.</p>
+                    </div>
+                    <div class="row">
+                        <h1 id="functions">Fonksiyonlar</h1>
+                        <ul class="content-list">
+                            <li><a href="index.html#get_results">get_results()</a></li>
+                            <li><a href="index.html#get_row">get_row()</a></li>
+                            <li><a href="index.html#get_var">get_var()</a></li>
+                            <li><a href="index.html#execute">execute()</a></li>
+                            <li><a href="index.html#select">select()</a></li>
+                            <li><a href="index.html#where">where()</a></li>
+                            <li><a href="index.html#group">group()</a></li>
+                            <li><a href="index.html#order">order()</a></li>
+                            <li><a href="index.html#limit">limit()</a></li>
+                            <li><a href="index.html#result">result()</a></li>
+                            <li><a href="index.html#insert">insert()</a></li>
+                            <li><a href="index.html#update">update()</a></li>
+                            <li><a href="index.html#delete">delete()</a></li>
+                        </ul>
+                        <h3 id="get_results">get_results()</h3>
+                        <pre><code>get_results ( <em>string</em> $sql_query [, <em>mixed</em> $bind [, <em>string</em> $parser ]] )</code></pre>                        <p>SQL sorguları ile işlem yapmak, tablonun tamamını veya bir bölümünü belirlenen ayrıştırma türünde geri döndürmek amacıyla kullanılmaktadır. Ayrıca, SQL injection açıklarından korunmak için PDO eklentisinin <em>binding</em> sistemini kullanmaktadır.</p>
+<pre><code># SELECT * FROM users
+$results = $spdo->get_results('SELECT * FROM users');
+var_dump($results);</code></pre>
+                        <p>İlk örnek <em>get_results()</em> fonksiyonunun en sade kullanımıdır.</p>
+<pre><code># SELECT * FROM users WHERE id > 70 AND id < 90
+$results = $spdo->get_results('SELECT * FROM users WHERE id > ? AND id < ?', array(70,90));</code></pre>
+                        <p>İkinci örneğimizde PDO eklentisinin özelliği olan <em>binding</em> sistemini kullandık. İkinci parametre; string, integer veya array olabilir. Eğer, bind sisteminde birden fazla değer kullanılması gerekiyorsa, örneğimizdeki gibi ikinci parametremizde veri türü array olmalı ve anahtarlar integer türünde olmalı. Aksi halde, bind sistemi çalışmayacaktır.</p>
+<pre><code># SELECT * FROM users WHERE id > 70 AND id < 90
+$results = $spdo->get_results('SELECT * FROM users WHERE id > ? AND id < ?', array(70,90), 'assoc');
+var_dump($results);</code></pre>
+                        <p>Üçüncü örneğimizde sorgu sonuçlarını ayrıştırma türümüzü belirledik. Spdo sonuçları varsayılan olarak <em>object</em> tipinde döndürmektedir. Fakat, array tipinde döndürmek istiyorsak üçüncü parametreye <em>assoc</em> değerini girmemiz gerekmektedir.</p>
+<pre><code>foreach ($results as $result) {
+    echo $result->id;
+    echo "..." . $result->name;
+    echo "..." . $result->email;
+    echo "&lt;br&gt;&lt;br&gt;";
+}</code></pre>
+                        <p>Dönen sorgu sonuçlarını kullanmak için <em>foreach</em> veya <em>while</em> döngülerini kullanabilirsiniz.</p>
+                    </div>
+                    <div class="row">
+                        <h3 id="get_row">get_row()</h3>
+                        <pre><code>get_row ( <em>string</em> $sql_query [, <em>mixed</em> $bind [, <em>string</em> $parser ]] )</code></pre>
+                        <p>SQL sorguları ile işlem yapmak, tablodan bir satır veriyi belirlenen ayrıştırma türünde geri döndürmek amacıyla kullanılmaktadır. Ayrıca, SQL injection açıklarından korunmak için PDO eklentisinin binding sistemini kullanmaktadır.</p>
+ <pre><code># SELECT * FROM users WHERE id = 5
+$result = $spdo->get_row('SELECT * FROM users WHERE id = 5');
+var_dump($result);</code></pre>
+                        <p>İlk örnek <em>get_row()</em> fonksiyonunun en sade kullanımıdır.</p>
+ <pre><code># SELECT * FROM users WHERE id = 5
+$result = $spdo->get_row('SELECT * FROM users WHERE id = ?', 5);
+var_dump($result);</code></pre>
+                        <p>İkinci örneğimizde PDO eklentisinin özelliği olan binding sistemini kullandık. İkinci parametre; string, integer veya array olabilir. Eğer, bind sisteminde birden fazla değer kullanılması gerekiyorsa, ikinci parametremizde veri türü array olmalı ve anahtarlar integer olmalıdır. Aksi halde, bind sistemi çalışmayacaktır.</p>
+ <pre><code># SELECT * FROM users WHERE id = 5
+$result = $spdo->get_row('SELECT * FROM users WHERE id = ?, 5, 'assoc');
+var_dump($result);</code></pre>
+                        <p>Üçüncü örneğimizde sorgu sonuçlarını ayrıştırma türümüzü belirledik. Spdo sonuçları varsayılan olarak object tipinde döndürmektedir. Fakat, array tipinde döndürmek istiyorsak üçüncü parametreye <em>assoc</em> değerini girmemiz gerekmektedir.</p>
+<pre><code>echo "Ad: " . $result->name;
+echo "&lt;br&gt;";
+echo "Email: " . $result->email;</code></pre>
+                        <p><em>get_row()</em> fonksiyonunda dönen sonuç için döngü yardımına ihtiyaç yoktur.</p>
+                    </div>
+                    <div class="row">
+                        <h3 id="get_var">get_var()</h3>
+                        <pre><code>get_var ( <em>string</em> $sql_query [, <em>mixed</em> $bind ] )</code></pre>
+                        <p>SQL sorguları ile işlem yapmak, sorgu sonucunda dönen veriden tek bir alana ait veriyi geri döndürmek için kullanılmaktadır. Ayrıca, SQL injection açıklarından korunmak için PDO eklentisinin <em>binding</em> sistemini kullanmaktadır.</p>
+ <pre><code># SELECT email FROM users WHERE id = 27
+$email = $spdo->get_var('SELECT email FROM users WHERE id = 27');
+var_dump($email);</code></pre>
+                        <p>İlk örnek <em>get_var()</em> fonksiyonunun en sade kullanımıdır.</p>
+<pre><code># SELECT email FROM users WHERE id = 27
+$email = $spdo->get_var('SELECT email FROM users WHERE id = ?', 27);
+var_dump($email);</code></pre>
+                        <p>İkinci örneğimizde PDO eklentisinin özelliği olan binding sistemini kullandık. İkinci parametre; string, integer veya array olabilir. Eğer, bind sisteminde birden fazla değer kullanılması gerekiyorsa, ikinci parametremizde veri türü array olmalı ve anaharlar integer olmalı. Aksi halde, bind sistemi çalışmayacaktır.</p>
+                        <pre><code>echo $email;</code></pre>
+                        <p><em>get_var()</em> fonksiyonunda dönen sonuç için döngü yardımına ihtiyaç yoktur.</p>
+                    </div>
+                    <div class="row">
+                        <h3 id="execute">execute()</h3>
+                        <pre><code>execute ( <em>string</em> $sql_query [, <em>mixed</em> $bind ] )</code></pre>
+                        <p>SQL sorguları ile ekleme, güncelleme ve silme işlemleri yapmak için kullanılmaktadır. Ekleme işleminde veritabanına eklenen satır ID değerini, güncelleme ve silme işlemlerinde etkilenen satır sayısını geriye döndürür. İşlemin olumsuz sonuçlanması durumunda <em>false</em> döner.</p>
+<pre><code># INSERT INTO users SET name = "Gürkan", email = "gurkanbicer@yandex.com"
+$result = $spdo->execute('INSERT INTO users SET name = "Gürkan", email = "gurkanbicer@yandex.com"');
+var_dump($result);</code></pre>
+                        <p>İlk örnek execute() fonksiyonu ile bir ekleme işlemidir.</p>
+<pre><code># INSERT INTO users name = ?, email = ?
+$result = $spdo->execute('INSERT INTO users SET name = ?, email = ?',array("Gürkan","gurkanbicer@yandex.com"));
+var_dump($result);</code></pre>
+                        <p>İkinci örnekte PDO eklentisinin <em>binding</em> sistemini kullandık.</p>
+<pre><code># UPDATE users SET name = "Gürkan Biçer", email = "gurkanbicer@yandex.com" WHERE id = 25
+$result = $spdo->execute('UPDATE users SET name = ?, email = ? WHERE id = ?',array("Gürkan Biçer", "gurkanbicer@yandex.com", 25));
+var_dump($result);</code></pre>
+                        <p>Üçüncü örnekte bir güncelleme sorgusunu <em>execute()</em> fonksiyonu ve <em>binding</em> sistemi ile kullandık.</p>
+<pre><code># DELETE FROM users WHERE id = 25
+$result = $spdo->execute('DELETE FROM users WHERE id = ?', 25);
+var_dump($result);</code></pre>
+                        <p>Dördüncü örnekte bir silme sorgusunu <em>execute()</em> fonksiyonu ve <em>binding</em> sistemi ile kullandık.</p>
+                    </div>
+                    <div class="row">
+                        <h3 id="select">select()</h3>
+                        <pre><code>select( <em>string</em> $col [, <em>string</em> $tbl ] )</code></pre>
+                        <p>SQL sorgusu yazmadan, veri sorgulamak için kullanılmaktadır. Ancak, sonucu geri döndürmek için <em>result()</em> fonksiyonu ile beraber kullanılması zorunludur.</p>
+ <pre><code># SELECT * FROM users
+$result = $spdo->select('*','users')->result();
+var_dump($result);</code></pre>
+                        <p>İlk örnekte veri <em>object</em> tipinde dönmektedir. Eğer, <em>array</em> tipinde geri döndürülmek isteniyorsa <em>result()</em> fonksiyonun ilk parametresine <strong>assoc</strong> değerini girmeniz gerekmektedir.</p>
+ <pre><code># SELECT id,name FROM users
+$query = $spdo->select('id,name','users');
+$result = $query->result();
+var_dump($result);</code></pre>
+                        <p>İkinci örnekte <em>result()</em> fonksiyonunun bir alt satırda kullandık. <em>$query->result()</em> olarak kullanılmasının sebebi <em>select()</em> fonksiyonunun sınıfı <em>$query</em> değişkenine yüklemesidir. İlk örnekteki gibi tek satırda da kullanılabilir, ikinci örnekte gibi alt alta da kullanılabilmektedir.</p>
+                    </div>
+                    <div class="row">
+                        <h3 id="where">where()</h3>
+                        <pre><code>where ( <em>mixed</em> $body [, <em>mixed</em> $bind ] )</code></pre>
+                        <p>SQL sorgusu yazmadan, veri sorgulama işleminde filtreleme görevi görmektedir. Kullanımı için <em>select()</em> fonksiyonuna ve veri döndürmek için <em>result()</em> fonksiyonuna ihtiyaç duyar.</p>
+                        <pre><code># SELECT * FROM users WHERE id > 5 AND id < 10
+$result = $spdo->select('*','users')->where(array('id > ?','id < ?'),array(5,10))->result();
+var_dump($result);</code></pre>
+                        <p>veya</p>
+                        <pre><code># SELECT * FROM users WHERE id > 5 AND id < 10
+$query = $spdo->select('*','users');
+$query->where(array('id > ?','id < ?'),array(5,10));
+$result = $query->result();
+var_dump($result);</code></pre>
+                        <p><em>Binding</em> sistemini kullanmayacaksanız:</p>
+                        <pre><code>$query->where(array('id > 5','id < 10'));</code></pre>
+                    </div>
+                    <div class="row">
+                        <h3 id="group">group()</h3>
+                        <pre><code>group ( <em>string</em> $col )</code></pre>
+                        <p>Belirlenen kolona ait aynı değeri içeren satırları gruplandırmak için kullanılmaktadır.</p>
+<pre><code># SELECT count(*), name FROM users GROUP BY name
+$query = $spdo->select('count(*), name','users');
+$query->group('name');
+$result = $query->result();
+var_dump($result);</code></pre>
+                        <p>Örnekte dönen sonuç name değeri aynı olan kayıt sayısı ve name değerleri olacaktır.</p>
+                    </div>
+                    <div class="row">
+                        <h3 id="order">order()</h3>
+                        <pre><code>order ( <em>string</em> $order_by [, <em>int</em> $sort ] )</code></pre>
+                        <p>Belirli bir kolona göre artan veya azalan yönde sıralamak için kullanılmaktadır. İlk parametre verinin hangi kolona göre sıralanacağını belirler. Verinin artan yani "asc" olarak sıralanması gerekiyorsa ikinci parametre 1 değeri, azalan yönde "desc" olarak sıralanması gerekiyorsa -1 değerini almalıdır. İkinci parametre boş bırakılırsa, varsayılan olarak artan yönde sıralama işlemi yapar.</p>
+<pre><code># SELECT * FROM users ORDER BY id DESC
+$query = $spdo->select('*','users');
+$query->order('id',-1);
+$result = $query->result();
+var_dump($result);</code></pre>
+                    </div>
+                    <div class="row">
+                        <h3 id="limit">limit()</h3>
+                        <pre><code>limit ( <em>int</em> $start [, <em>int</em> $show ] )</code></pre>
+                        <p>Belirli bir kayıt aralığındaki satırların seçilmesi için kullanılır. İlk parametre seçilecek satır aralığının başlangıç sayısıdır, ikinci parametre ise başlangıçtan itibaren seçeceği kayıt sayısıdır. Eğer ikinci parametre boş bırakılırsa, ilk parametreye yazılan değer, limit değer olarak belirlenir.</p>
+<pre><code># SELECT * FROM users LIMIT 0,5
+$query = $spdo->select('*','users');
+$query->limit(0,5);
+$result = $query->result();
+var_dump($result)</code></pre>
+                    </div>
+                    <div class="row">
+                        <h3 id="result">result()</h3>
+                        <pre><code>result ( <em>string</em> $parse )</code></pre>
+                        <p><em>select()</em> ve diğer yardımcı fonksiyonlarla <em>(where, group, order, limit)</em> birlikte kullanılmaktadır. İlk parametre ayrıştırma türünü belirlemektedir. Fonksiyon, select ve yardımcı fonksiyonlarının oluşturduğu sorguyu çalıştırmak ve geri döndürmek için kullanılmaktadır.</p>
+                    </div>
+                    <div class="row">
+                        <h3 id="insert">insert()</h3>
+                        <pre><code>insert ( <em>string</em> $tbl [, <em>array</em> $data ] )</code></pre>
+                        <p>Veritabanına kayıt eklemek için kullanılmaktadır. İlk parametre tablo adını, ikinci parametre tabloya eklenecek değerleri içermektedir. Dizide, anahtar isimleri kolon ismi, değerler eklenecek veriler olarak hazırlanmalıdır.</p>
+<pre><code>$insert_data = array(
+    'name'  => 'Gürkan',
+    'email' => 'gurkanbicer@yandex.com',
 );
-?&gt;</code></pre>
-            </p>
-            <p>MySQL kullanıcı adı ve parolamız, MySQL veritabanı adı, host adı, karakter seti, önbellekleme özelliği, önbellek dizini ve önbellek süresini bu dosyada belirliyoruz. Eğer önbellekleme özelliğini deaktif etmek istiyorsanız <strong>cache</strong> indisinin değerini <em>false</em> olarak değiştirin.</p>
-            <p>
-<pre><code>&lt?php
-$spdo = new sPDO($sPDO_cnf);
-?&gt;</code></pre>
-            </p>
-            <p><strong>$spdo</strong> değişkenine sınıfı atadıktan sonra scriptlerinizde kullanmaya başlayabilirsiniz.</p>
-            <h4>CodeIgniter</h4>
-            <p><em>Kurulum CodeIgniter'da gerçekleşecekse; codeigniter dizinindeki dosyaları kullanacağız.</em></p>
-            <p>
-                <ol>
-                    <li>Dosyaları application dizini altındaki config, libraries ve third_party dizinlerine taşıyın.</li>
-                    <li>config dizininde sPDO.php dosya içeriğini düzenleyin.</li>
-                </ol>
-            </p>
-            <p>Kod yazmaya başlayalım.</p>
-            <p>
-<pre><code>&lt;?php
-$this->load->library('sPDO');
-?&gt;</code></pre>
-            </p>
-            <p>Sınıfı controller dosyamızda üstteki kod satırı ile çağırıyoruz. Eğer, sPDO'nun otomatik olarak yüklenmesini istiyorsanız autoload.php dosyasını açın ve $autoload dizisine 'sPDO' içeriğinde bir string değer ekleyip, kaydedin.</p>
-        </div>
-        <div class="row">
-            <h3 id="fonksiyonlar">Fonksiyonlar</h3>
-            <hr />
-            <h4>get_results()</h4>
-            <p>SQL sorgusu sonucunda dönen <u>satır sayısı</u> 1'den fazla ise get_results() fonksiyonu kullanılır. Bu fonksiyon üç parametreden oluşmaktadır. <br /> <br />
-            İlk parametreye SQL sorgusu yazılır. İkinci parametre SQL Injection açıklarından korunmak için PDO'nun binding sistemini kullanır ve bu parametreye SQL sorgusu içerisinde kullanılacak değerler girilir. Üçüncü parametre ayrıştırma türüdür ve dönecek verinin object veya array tipinde dönmesini belirlemek için kullanılır.
-            </p>
-            <p>
-<pre><code>&lt;?php
-$results = $spdo->get_results('SELECT * FROM tbl');
-?&gt;</code></pre>
-            </p>
-            <p>Üstteki kod satırında <strong>tbl</strong> tablosundan tüm alanları ve satırları getirilmesi ve $results değişkenine atanması isteniyor. Sonucu görmek için aşağıdaki kod satırlarını da dahil edebilirsiniz.</p>
-            <p>
-<pre><code>&lt;?php
-echo '&lt;pre&gt;';
-var_dump($results);
-echo '&lt;/pre&gt;';
-?&gt;</code></pre>
-            </p>
-            <h4>get_row()</h4>
-            <p>SQL sorgusu sonucunda dönen <u>satır sayısı</u> 1 ise get_row() fonksiyonu kullanılır. Bu fonksiyon üç parametreden oluşmaktadır. <br /> <br />
-                İlk parametreye SQL sorgusu yazılır. İkinci parametre SQL Injection açıklarından korunmak için PDO'nun binding sistemini kullanır ve bu parametreye SQL sorgusu içerisinde kullanılacak değerler girilir. Üçüncü parametre ayrıştırma türüdür ve dönecek verinin object veya array tipinde dönmesini belirlemek için kullanılır.
-            </p>
-            <p>
-<pre><code>&lt;?php
-$results = $spdo->get_row('SELECT * FROM tbl WHERE id=1');
-?&gt;</code></pre>
-            </p>
-            <p>Üstteki kod satırında <strong>tbl</strong> tablosundan tüm alanları ve satırları getirilmesi ve $results değişkenine atanması isteniyor. Sonucu görmek için aşağıdaki kod satırlarını da dahil edebilirsiniz.</p>
-            <p>
-<pre><code>&lt;?php
-echo '&lt;pre&gt;';
-var_dump($results);
-echo '&lt;/pre&gt;';
-?&gt;</code></pre>
-            </p>
-            <h4>get_var()</h4>
-            <p>SQL sorgusu sonucunda tek alan değeri dönecekse get_var() fonksiyonu kullanılır. Bu fonksiyon iki parametreden oluşmaktadır. <br /> <br />
-                İlk parametreye SQL sorgusu yazılır. İkinci parametre SQL Injection açıklarından korunmak için PDO'nun binding sistemini kullanır ve bu parametreye SQL sorgusu içerisinde kullanılacak değerler girilir.
-            </p>
-            <p>
-<pre><code>&lt;?php
-$results = $spdo->get_var('SELECT name FROM tbl WHERE id=1');
-?&gt;</code></pre>
-            </p>
-            <p>Üstteki kod satırında <strong>tbl</strong> tablosundan tüm alanları ve satırları getirilmesi ve $results değişkenine atanması isteniyor. Sonucu görmek için aşağıdaki kod satırlarını da dahil edebilirsiniz.</p>
-            <p>
-<pre><code>&lt;?php
-echo '&lt;pre&gt;';
-var_dump($results);
-echo '&lt;/pre&gt;';
-?&gt;</code></pre>
-            </p>
-            <h4>insert()</h4>
-            <p>Veri ekleme işlemlerinde insert() fonksiyonu kullanılır. İşlemin başarılı olması durumunda son eklenen satırın ID değerini döndürür. Başarısız olursa <em>false</em> döner. Bu fonksiyon iki parametreden oluşmaktadır. <br /> <br />
-                İlk parametreye SQL sorgusu yazılır. İkinci parametre SQL Injection açıklarından korunmak için PDO'nun binding sistemini kullanır ve bu parametreye SQL sorgusu içerisinde kullanılacak değerler girilir.</p>
-            <p>
-<pre><code>&lt;?php
-$insert_id = $spdo->insert('INSERT INTO tbl SET name="sPDO Sınıfı", version="1.1.0", description="Veritabanı sınıfı"');
-?&gt;</code></pre>
-            </p>
-            <h4>update()</h4>
-            <p>Veri güncelleme işlemlerinde update() fonksiyonu kullanılır. İşlemin başarılı olması durumunda etkilenen satır sayısını döndürür. Başarısız olursa <em>false</em> döner. Bu fonksiyon iki parametreden oluşmaktadır. <br /> <br />
-                İlk parametreye SQL sorgusu yazılır. İkinci parametre SQL Injection açıklarından korunmak için PDO'nun binding sistemini kullanır ve bu parametreye SQL sorgusu içerisinde kullanılacak değerler girilir.</p>
-            <p>
-<pre><code>&lt;?php
-$affected_rows = $spdo->update('UPDATE tbl SET version="1.2.0" WHERE id > 3');
-?&gt;</code></pre>
-            </p>
-            <h4>delete()</h4>
-            <p>Veri silme işlemlerinde delete() fonksiyonu kullanılır. İşlemin başarılı olması durumunda etkilenen satır sayısını döndürür. Başarısız olursa <em>false</em> döner. Bu fonksiyon iki parametreden oluşmaktadır. <br /> <br />
-                İlk parametreye SQL sorgusu yazılır. İkinci parametre SQL Injection açıklarından korunmak için PDO'nun binding sistemini kullanır ve bu parametreye SQL sorgusu içerisinde kullanılacak değerler girilir.</p>
-            <p>
-<pre><code>&lt;?php
-$affected_rows = $spdo->delete('DELETE FROM tbl WHERE id > 5');
-?&gt;</code></pre>
-            </p>
-        </div>
-        <div class="row">
-            <h3 id="degiskenler">Değişkenler</h3>
-            <hr />
-            <h4>num_rows</h4>
-            <p>get_results(), get_row() ve get_var() fonksiyonlarıyla beraber kullanılan num_rows değişkeni SELECT sorgusu sonucunda dönen satır sayısını verir. <br/> <em>NOT: Son sorguya ait satır sayısını tuttuğu için, sorgunun hemen altında kullanılmalıdır.</em></p>
-            <p>
-<pre><code>&lt;?php
-$results = $spdo->get_results('SELECT * FROM tbl');
-$row_count = $spdo->num_rows;
-?&gt;</code></pre>
-            </p>
+$result = $spdo->insert('users',$insert_data);
+var_dump($result);</code></pre>
+                        <p><em>insert()</em> fonksiyonu doğrudan binding sistemini kullanmaktadır. İşlemin gerçekleşmesi sonucunda eklenen satırın ID değerini döndürür. Olumsuz olması durumunda <em>false</em> döner.</p>
+                    </div>
+                    <div class="row">
+                        <h3 id="update">update()</h3>
+                        <pre><code>update ( <em>string</em> $tbl [, <em>array</em> $data [, <em>mixed</em> $where [, <em>mixed</em> $where_bind ]]] )</code></pre>
+                        <p>Veritabanında kayıt güncellemek için kullanılmaktadır. İlk parametre tablo adını, ikinci parametre verileri, üçüncü parametre filtre, dördüncü parametre ise filtre için binding sistemini kullanılır. İkinci parametreye girilen veri array tipinde olmalı ve anahtar isimleri kolon adı, değerler ise güncellenecek yeni değerler olmalıdır. Üçüncü parametre array veya string olabilir. Binding sistemi kullanılacaksa, dördüncü parametreninde kullanılması gerekmektedir.</p>
+ <pre><code># UPDATE users SET name = "Gürkan" WHERE id = 25
+$update_data = array(
+    'name' => "Gürkan",
+);
+$result = $spdo->update('users',$update_data,'id = ?',25);
+var_dump($result);</code></pre>
+                    </div>
+                    <div class="row">
+                        <h3 id="delete">delete()</h3>
+                        <pre><code>delete ( <em>string</em> $tbl [, <em>mixed</em> $where [, <em>mixed</em> $where_bind ]] )</code></pre>
+                        <p>Veritabanında kayıt silmek için kullanılmaktadır. İlk parametre tablo adını, ikinci parametre filtre, üçüncü parametre ise filtre için binding sistemini kullanır.</p>
+<pre><code># DELETE FROM users WHERE id = 5
+$result = $spdo->delete('users','id = ?',5);
+var_dump($result);</code></pre>
+                    </div>
+                    <div class="row">
+                        <h1 id="variables">Değişkenler</h1>
+                        <ul class="content-list">
+                            <li><a href="index.html#num_rows">num_rows</a></li>
+                        </ul>
+                    </div>
+                    <div class="row">
+                        <h3 id="num_rows">num_rows</h3>
+                        <p><em>get_results()</em>, <em>get_row()</em>, <em>get_var()</em> ve <em>select()</em> fonksiyonlarından hemen sonra dönen satır sayısı bilgisini geri döndürür.</p>
+<pre><code>echo $spdo->num_rows;</code></pre>
+                    </div>
 
-        </div>
-        <div class="row">
-            <h3 id="ozellikler">Özellikler</h3>
-            <hr />
-            <h4>Cache</h4>
-            <p>sPDO, cache özelliğinde dosya sistemini kullanır. SQL sorgularından dönen veriler ve veri sayısı txt dosyası içerisine arkaplanda kayıt edilir. SQL sorgusunun tekrar kullanımında dosyanın değiştirilme tarihinin, config dosyası içerisinde belirlediğiniz zaman dilimini aşmaması durumunda, sorgudan dönen verilerin kayıt edildiği dosya okunur. Zaman dilimini aşması durumunda tekrar MySQL'e bağlanır. </p>
-            <p>Cache özelliğini aktif etmek için config dosyası içerisindeki $sPDO_cnf dizisinde, cache indisi true olarak değiştirilir. Pasifleştirilmek isteniyorsa, false olarak değiştirilir.</p>
-            <p>
-<pre><code>&lt;?php
-$sPDO_cnf = array(
-    'cache'         => true,
-    'cachedir'      => 'cache/',
-    'cacheexpire'   => 900,
-);
-?&gt;</code></pre>
-            </p>
-            <h4>Binding</h4>
-            <p>Binding sistemi PDO sınıfının bir özelliğidir. SQL Injection açıklarından ve sorgu içerisinde özel karakter kullanımından oluşabilecek hataların önüne geçmek için kullanılır.</p>
-            <p>sPDO'da tüm fonksiyonlarda binding sistemi kullanılabilmektedir. Her fonksiyon için birer örnekle binding sistemini açıklayalım.</p>
-            <p>
-<pre><code>&lt;?php
-$results = $spdo->get_results('SELECT * FROM tbl WHERE id > ? AND name = ?', array(3, "Ali"));
-?&gt;</code></pre>
-<pre><code>&lt;?php
-$results = $spdo->get_row('SELECT * FROM tbl WHERE id = ? AND name = ?', array(7, "Ali"));
-?&gt;</code></pre>
-<pre><code>&lt;?php
-$results = $spdo->get_var('SELECT email FROM tbl WHERE id = ? AND name = ?', array(7, "Ali"));
-?&gt;</code></pre>
-<pre><code>&lt;?php
-$insert_id = $spdo->insert('INSERT INTO tbl SET name=?, email=?, age=?', array("Ali", "deneme@yandex.com", 17));
-?&gt;</code></pre>
-<pre><code>&lt;?php
-$affected_rows = $spdo->update('UPDATE tbl SET name=?, email=?, age=? WHERE id=?', array("Mehmet", "deneme@gmail.com", 19, 100));
-?&gt;</code></pre>
-<pre><code>&lt;?php
-$affected_rows = $spdo->delete('DELETE FROM tbl WHERE id=?', array(1));
-?&gt;</code></pre>
-            </p>
-            <h4>Ayrıştırma Türleri</h4>
-            <p>get_results() ve get_row() fonksiyonlarda dönen veriyi array veya object olarak kullanabilirsiniz. Standart olarak dönen veri object tipindedir. Eğer array tipinde kullanmak isterseniz üçüncü parametreye <strong>assoc</strong> yazmanız gerekir. Birer örnekle ayrıştırma özelliğini açıklayalım.</p>
-            <p>
-<pre><code>&lt;?php
-$results = get_results('SELECT * FROM tbl WHERE id > 3', null, 'assoc');
-?&gt;</code></pre>
-<pre><code>&lt;?php
-$results = get_row('SELECT * FROM tbl WHERE id = 3', null, 'assoc');
-?&gt;</code></pre>
-            </p>
-        </div>
-        <div class="row">
-            <h3 id="notlar">Sürüm Notları</h3>
-            <hr />
-            <p>
-                1.0.0 - Başlangıç sürümü (23.10.2013)<br />
-                <strong>1.1.0 - Cache özelliği eklendi. (25.10.2013)</strong><br />
-            </p>
-        </div>
-        <div class="row">
-            <div id="copyright">
-                <a href="https://github.com/gurkanbicer/sPDO" target="_blank">GitHub</a> - <strong>Versiyon:</strong> 1.1.0 -  <strong>Geliştirici:</strong> <a href="http://tr.linkedin.com/in/gurkanbicer" target="_blank">Gürkan Biçer</a>
+                </div>
+
             </div>
         </div>
-    </div>
-</body>
+        <div id="sticky-footer">
+            <div class="container">
+                Developer: <a href="http://www.gurkanbicer.com.tr" target="_blank">Gürkan Biçer</a>
+            </div>
+        </div>
+    </body>
 </html>
