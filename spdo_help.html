@@ -1,8 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>sPDO - PHP Veritabanı Sınıfı</title>
+        <title>sPDO (Smart PDO) - PHP Veritabanı Sınıfı</title>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="description" content="sPDO (Smart PDO) bir PHP veritabanı sınıfıdır." />
+        <meta name="keywords" content="spdo, smart pdo, spdo veritabanı sınıfı, pdo, pdo veritabanı sınıfı, spdo nedir, php veritabanı sınıfı" />
+        <meta name="author" content="Gürkan Biçer" />
+        <meta name="google" content="notranslate" />		
         <style type="text/css">
         @import url(http://fonts.googleapis.com/css?family=Roboto:900,400,500,700);body,html{height:100%}body{background:#EEE url(http://www.gurkanbicer.com.tr/public/noise.png) repeat;font-family:Arial,sans-serif;font-size:10pt;font-weight:400;margin:0}#wrapper{width:100%;height:100%;height:auto!important;min-height:100%;margin:0 auto -50px;padding:0}#sticky-footer{width:100%;height:50px;margin:0;padding:0;clear:both;box-sizing:border-box;-moz-box-sizing:border-box;-webkit-box-sizing:border-box;background:#303030 url(http://www.gurkanbicer.com.tr/public/noise-2.png) repeat}#sticky-footer .container{line-height:50px;color:#DDD}#sticky-footer .container a{color:#FFF;text-decoration:none}#sticky-footer .container a:hover{text-decoration:underline}#navbar{background:#9061C2 url(http://www.gurkanbicer.com.tr/public/noise-2.png) repeat;width:100%;height:50px;margin:0;padding:0;display:block;float:left;position:fixed}#contents{width:100%;height:auto;margin:0;padding:50px 0;display:block;float:left;box-sizing:border-box;-moz-box-sizing:border-box;-webkit-box-sizing:border-box}.container{width:900px;height:auto;min-height:10px;margin:0 auto;padding:0;box-sizing:border-box;-moz-box-sizing:border-box;-webkit-box-sizing:border-box}.pull-left{float:left}.pull-right{float:right}.row{width:100%;height:auto;min-height:30px;margin:0;padding:0;display:block;float:left}.row+.row{margin-top:15px}h1{font-family:Roboto,sans-serif;font-size:18pt;font-weight:700;color:#303030;margin:25px 0;padding:0;text-align:left}h3{font-family:Roboto,sans-serif;font-size:12pt;font-weight:500;color:#606060;margin:10px 0;padding:0}p{margin:0;padding:0;line-height:1.4;font-family:Arial,sans-serif;font-size:10pt;color:#303030}p+p{margin-top:10px}p a{color:#303030}ul.content-list li+li{margin-top:5px}ul.content-list li ul{margin-top:10px}ul.content-list li a{color:#303030;text-decoration:none}ul.content-list li a:hover{text-decoration:underline}code,pre{font-family:Monaco,Menlo,Consolas,"Courier New",monospace}code{padding:2px 4px;font-size:90%;color:#c7254e;background-color:#f9f2f4;white-space:nowrap;border-radius:4px}pre{display:block;padding:9.5px;margin:10px 0;font-size:13px;line-height:1.428571429;word-break:break-all;word-wrap:break-word;color:#333;background-color:#f5f5f5;border:1px solid #ccc;border-radius:4px}pre.prettyprint{margin-bottom:20px}pre code{padding:0;font-size:inherit;color:inherit;white-space:pre-wrap;background-color:transparent;border:0}.pre-scrollable{max-height:340px;overflow-y:scroll}#navbar-menu{margin:0;padding:0;list-style:none;height:50px}#navbar-menu>li.brand{width:auto;height:50px;line-height:50px;margin:0 auto;padding:0 20px;display:block;float:left;box-sizing:border-box;-moz-box-sizing:border-box;-webkit-box-sizing:border-box}#navbar-menu>li.brand>a{color:#FFF;font-family:Roboto,sans-serif;font-size:20pt;font-weight:700;text-decoration:none;transition:all .2s;-webkit-transition:all .2s}#navbar-menu>li.brand>a:hover{color:#EEE}#navbar-menu>li.item{width:auto;height:50px;line-height:50px;margin:0;padding:0 15px;display:block;float:left;box-sizing:border-box;-moz-box-sizing:border-box;-webkit-box-sizing:border-box}#navbar-menu>li.item>a{color:#FFF;font-family:Arial,sans-serif;font-size:11pt;font-weight:400;text-decoration:none}#navbar-menu>li.item>a:hover{text-decoration:underline}
         </style>
@@ -33,9 +37,6 @@
                     </ul>
                     <ul id="navbar-menu" class="pull-right">
                         <li class="item">
-                            <a href="https://github.com/gurkanbicer/sPDO">Github</a>
-                        </li>
-                        <li class="item">
                             <a href="https://github.com/gurkanbicer/sPDO/archive/master.zip">İndir (1.2.0)</a>
                         </li>
                     </ul>
@@ -46,7 +47,7 @@
                     <div class="row">
                         <h1 id="intro">Giriş</h1>
                         <h3>Spdo nedir?</h3>
-                        <p><strong>Spdo</strong> bir veritabanı sınıfıdır. <strong>MySQL</strong> üzerinde <abbr title="Create Read Update Delete">CRUD</abbr> işlemlerini kolaylaştırmak, geliştiriciyi PHP'nin eski mysql fonksiyonlarından kurtarmak ve <a title="Object Relational Mapping" href="http://tr.wikipedia.org/wiki/ORM" target="_blank">ORM</a> yapı ile geliştiriciyi nesne tabanlı programlamaya teşvik etmek amaçlarını gütmektedir. <strong>Spdo</strong> sınıfı, arkaplanda PHP'nin <abbr title="PHP Data Objects">PDO</abbr> eklentisini kullanmaktadır.</p>
+                        <p><strong>Spdo</strong> bir veritabanı sınıfıdır. <strong>MySQL</strong> üzerinde <abbr title="Create Read Update Delete">CRUD</abbr> işlemlerini kolaylaştırmak, geliştiriciyi PHP'nin eski mysql fonksiyonlarından kurtarmak ve geliştiriciyi nesne tabanlı programlamaya teşvik etmek amaçlarını gütmektedir. <strong>Spdo</strong> sınıfı, arkaplanda PHP'nin <abbr title="PHP Data Objects">PDO</abbr> eklentisini kullanmaktadır.</p>
                     </div>
                     <div class="row">
                         <h3>Geçmiş</h3>
@@ -58,7 +59,7 @@
                         <ul class="content-list">
                             <li>Çekirdek ve fonksiyonlar, işlemlerin olası hatalarda daha hızlı sonuca erişmesi ve iç içe if else bloklarının sebep olduğu kod yığınından kurtulması için istisna yönetimi <em>try catch</em> yapısına geçildi.</li>
                             <li><em>insert()</em>, <em>update()</em> ve <em>delete()</em> fonksiyonları <em>execute()</em> fonksiyonunda birleştirildi.</li>
-                            <li>ORM yapıya geçildi. Eklenen yeni fonksiyonlar:
+                            <li>SQL sorguları kullanmadan, pratik bir şekilde sorgu çalıştıran fonksiyonlar eklendi.
                                 <ul>
                                     <li>select()</li>
                                     <li>where()</li>
